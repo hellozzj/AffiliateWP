@@ -541,7 +541,7 @@ function affwp_abs_number_round( $val, $precision = 2 ) {
 	$thousands_sep = affiliate_wp()->settings->get( 'thousands_separator', ',' );
 	$decimal_sep   = affiliate_wp()->settings->get( 'decimal_separator', '.' );
 
-	if ( '.' === $thousands_sep && ',' === $decimal_sep ) {
+	if ( ( '.' === $thousands_sep || ' ' === $thousands_sep ) && ',' === $decimal_sep ) {
 		$val = floatval( str_replace( $decimal_sep, '.', str_replace( $thousands_sep, '', $val ) ) );
 	}
 
