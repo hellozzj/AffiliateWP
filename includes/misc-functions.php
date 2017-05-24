@@ -543,10 +543,10 @@ function affwp_abs_number_round( $val, $precision = 2 ) {
 
 	if ( '.' === $thousands_sep && ',' === $decimal_sep ) {
 		$val = floatval( str_replace( $decimal_sep, '.', str_replace( $thousands_sep, '', $val ) ) );
-	} else {
-		// Value cannot be negative
-		$val = abs( $val );
 	}
+
+	// Value cannot be negative
+	$val = abs( $val );
 
 	// Decimal precision must be a absolute integer
 	$precision = absint( $precision );
