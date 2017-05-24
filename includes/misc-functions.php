@@ -536,11 +536,17 @@ function affwp_abs_number_round( $val, $precision = 2 ) {
 	if ( is_null( $val ) || '' === $val || false === $val ) {
 
 		return;
-
 	}
 
-	// Value cannot be negative
-	$val = abs( $val );
+	$thousands_sep = affiliate_wp()->settings->get( 'thousands_separator', ',' );
+	$decimal_sep   = affiliate_wp()->settings->get( 'decimal_separator', '.' );
+
+	if ( '.' === $thousands_sep && ',' === $decimal_sep ) {
+		$val = floatval( str_replace( $decimal_sep, '.', str_replace( $thousands_sep, '', $val ) ) );
+	} else {
+		// Value cannot be negative
+		$val = abs( $val );
+	}
 
 	// Decimal precision must be a absolute integer
 	$precision = absint( $precision );
@@ -549,11 +555,7 @@ function affwp_abs_number_round( $val, $precision = 2 ) {
 	$val = sprintf( ( round( $val, $precision ) == intval( $val ) ) ? '%d' : "%.{$precision}f", $val );
 
 	// Convert number to the proper type (int, float, or string) depending on its value
-	if ( false !== strpos( $val, '.' ) ) {
-
-		$val = ( '0' !== substr( $val, -1 ) ) ? floatval( $val ) : (string) $val;
-
-	} else {
+	if ( false === strpos( $val, '.' ) ) {
 
 		$val = absint( $val );
 

@@ -210,6 +210,29 @@ class Tests extends UnitTestCase {
 	}
 
 	/**
+	 * @covers ::affwp_abs_number_round()
+	 */
+	public function test_abs_number_round_with_period_decimal_separator_should_be_unchanged() {
+		$this->assertSame( '0.50', affwp_abs_number_round( '0.50' ) );
+	}
+
+	public function test_abs_number_round_with_comma_decimal_separator_should_be_should_be_normalized() {
+		affiliate_wp()->settings->set( array(
+			'thousands_separator' => '.',
+			'decimal_separator' => ','
+		) );
+
+		$this->assertSame( '0.50', affwp_abs_number_round( '0,50' ) );
+
+
+		// Clean up.
+		affiliate_wp()->settings->set( array(
+			'thousands_separator' => ',',
+			'decimal_separator' => '.'
+		) );
+	}
+
+	/**
 	 * @covers ::affwp_get_logout_url
 	 */
 	public function test_affwp_get_logout_url() {
