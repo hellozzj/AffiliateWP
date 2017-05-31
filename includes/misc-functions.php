@@ -538,15 +538,21 @@ function affwp_abs_number_round( $val, $precision = 2 ) {
 		return;
 	}
 
-	$thousands_sep = affiliate_wp()->settings->get( 'thousands_separator', ',' );
-	$decimal_sep   = affiliate_wp()->settings->get( 'decimal_separator', '.' );
+	// Convert comma decimal separators.
+	if ( preg_match( '/\,\d{1,2}$/', $val ) ) {
+		$val = str_replace( ',', '.', $val );
+	}
 
-	if ( ( '.' === $thousands_sep || ' ' === $thousands_sep ) && ',' === $decimal_sep ) {
-		$val = floatval( str_replace( $decimal_sep, '.', str_replace( $thousands_sep, '', $val ) ) );
+	// Convert period and space thousand separators.
+	if ( preg_match( '/\d{1,3}(?:[.|\s]\d{3})+/', $val ) ) {
+		$val = str_replace( array( '.', ' ' ), ':', $val );
+
+		// Re-replace the colons with commas.
+		$val = floatval( str_replace( ':', ',', $val ) );
 	}
 
 	// Value cannot be negative
-	$val = abs( $val );
+	$val = abs( floatval( $val ) );
 
 	// Decimal precision must be a absolute integer
 	$precision = absint( $precision );
