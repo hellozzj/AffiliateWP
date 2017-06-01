@@ -541,17 +541,14 @@ function affwp_abs_number_round( $val, $precision = 2 ) {
 	$comma_decimal_sep    = preg_match( '/\,\d{1,2}$/', $val );
 	$period_thousands_sep = preg_match( '/\d{1,3}(?:[.|\s]\d{3})+/', $val );
 
-	if ( $period_thousands_sep || $comma_decimal_sep ) {
-		// Convert period and space thousand separators.
-		if ( $period_thousands_sep ) {
-			$val = str_replace( array( '.', ' ' ), '', $val );
-		}
+	// Convert period and space thousand separators.
+	if ( $period_thousands_sep ) {
+		$val = str_replace( array( '.', ' ' ), '', $val );
+	}
 
-		// Convert comma decimal separators.
-		if ( $comma_decimal_sep ) {
-			$val = str_replace( ',', '.', $val );
-		}
-
+	// Convert comma decimal separators.
+	if ( $comma_decimal_sep ) {
+		$val = str_replace( ',', '.', $val );
 	}
 
 	// Value cannot be negative
