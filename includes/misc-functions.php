@@ -538,7 +538,7 @@ function affwp_abs_number_round( $val, $precision = 2 ) {
 		return;
 	}
 
-	$comma_decimal_sep     = preg_match( '/\,\d{1,2}$/', $val );
+	$comma_decimal_sep    = preg_match( '/\,\d{1,2}$/', $val );
 	$period_thousands_sep = preg_match( '/\d{1,3}(?:[.|\s]\d{3})+/', $val );
 
 	if ( $period_thousands_sep || $comma_decimal_sep ) {
