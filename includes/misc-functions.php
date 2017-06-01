@@ -538,17 +538,32 @@ function affwp_abs_number_round( $val, $precision = 2 ) {
 		return;
 	}
 
+	$period_decimal_sep   = preg_match( '/\.\d{1,2}$/', $val );
 	$comma_decimal_sep    = preg_match( '/\,\d{1,2}$/', $val );
-	$period_thousands_sep = preg_match( '/\d{1,3}(?:[.|\s]\d{3})+/', $val );
+	$period_space_thousands_sep = preg_match( '/\d{1,3}(?:[.|\s]\d{3})+/', $val );
+	$comma_thousands_sep        = preg_match( '/\d{1,3}(?:,\d{3})+/', $val );
 
 	// Convert period and space thousand separators.
-	if ( $period_thousands_sep ) {
-		$val = str_replace( array( '.', ' ' ), '', $val );
+	if ( $period_space_thousands_sep ) {
+		$val = str_replace( ' ', '', $val );
+
+		if ( ! $comma_decimal_sep ) {
+			if ( ! $period_decimal_sep ) {
+				$val = str_replace( '.', '', $val );
+			}
+		} else {
+			$val = str_replace( '.', ':', $val );
+		}
 	}
 
 	// Convert comma decimal separators.
 	if ( $comma_decimal_sep ) {
 		$val = str_replace( ',', '.', $val );
+	}
+
+	// Clean up temporary replacements.
+	if ( $period_space_thousands_sep && $comma_decimal_sep || $comma_thousands_sep ) {
+		$val = str_replace( array( ':', ',' ), '', $val );
 	}
 
 	// Value cannot be negative
